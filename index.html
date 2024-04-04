@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <title>Feedback</title>
+    <style>
+        .rating {
+    display: flex;
+    justify-content: space-between;
+}
+
+      /* .rating {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rating div {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.rating label {
+    margin-right: 5px;
+}
+
+.rating span {
+    margin-right: 5px;
+    margin-left: 5px;
+} */
+      body {
+        margin: 30px;
+      }
+      li {
+        list-style-type: none;
+      }
+      header {
+        background-color: #2ecc71;
+        color: #FFFFFF;
+        text-align: center;
+        height: 75px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h2>Overall Rating</h2>
+
+    <label for="1"> * </label>+<h5 id="1">0 </h5>
+    
+    <label for="2">* *</label> <h5 id="2">0 </h5>
+    
+    <label for="3"> * * * </label> <h5 id="3"> 0 </h5>
+    
+    <label for="4"> * * * * </label> <h5 id="4">0 </h5>
+    <br>
+    <label for="5"> * * * * * </label> <h5 id="5">0 </h5>
+    <br> -->
+
+    <h2>Overall Rating</h2>
+
+<div class="rating">
+    <div>
+        <label for="1"> * </label>
+        
+        <h5 id="1">0</h5>
+    
+        <label for="2">* *</label>
+        
+        <h5 id="2">0</h5>
+    
+        <label for="3">* * *</label>
+        
+        <h5 id="3">0</h5>
+        
+    
+        <label for="4">* * * *</label>
+        
+        <h5 id="4">0</h5>
+
+        <label for="5">* * * * *</label>
+        
+        <h5 id="5">0</h5>
+    </div>
+</div>
+
+    <header><h2>Feedback Form</h2></header>
+
+
+    <form onsubmit="saveToAxios(event)">
+  
+        <!-- <p id="name"></p> -->
+
+        <div class="mb-3">
+            <label for="name" class="form-label" style="font-weight: bold">Name : </label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+        </div>
+        <div class="mb-3">
+            <label for="rating" class="form-label" style="font-weight: bold">Choose Rating : </label>
+            <select class="form-select" id="rating" name="rating">
+                <option></option>
+                <option value="1">1 </option>
+                <option value="2" >2 </option>
+                <option value="3" >3</option>
+                <option value="4" >4 </option>
+                <option value="5" >5</option>
+                
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" onclick="submitRating()">Add Rating</button>
+
+
+      <!-- <label>Name:</label>
+      <br /><input type="text" name="name" id="name"  required/> <br /><label
+        >Email:</label>
+      <br /><input type="email" name="useremail" id="userEmail" required />
+      <br /><label>Phone Number:</label> <br />
+      <input type="number" name="phonenumber" id="userPno"/>
+    <br /><br /><button>Submit</button> -->
+     
+    </form>
+
+    <h3>All Feedback's</h3>
+    <ul id='listOfitems'>
+    </ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"></script>
+    <script>
+
+    const api="9ec463a70eda4afe9182cd613130df05";
+
+      function saveToAxios(event){
+        event.preventDefault();
+        const name= event.target.name.value;
+        const rating = event.target.rating.value;
+    
+        
+        const obj={
+        name,
+        rating
+        }
+
+        axios.post(`https://crudcrud.com/api/${api}/rating`,obj)
+            .then((response)=>{
+                showUserOnScreen(response.data);
+                submitRating();
+                // putReq(userId,obj);  //1
+            }) //no ; here for then block
+            .catch((err)=>{
+                document.body.innerHTML=document.body.innerHTML+ "<h4> Something went Wrong !! </h4>"  //iF ANY ERR OCCURED THEN IT SHOWS THE ERR MESSAGE ON BROWSER
+                // console.log(err)
+            });
+
+        document.getElementById("name").value="";
+        document.getElementById("rating").value="";
+
+      
+        
+    }
+
+  
+
+    window.addEventListener("DOMContentLoaded",()=>{
+        axios.get(`https://crudcrud.com/api/${api}/rating`)
+        .then((response)=>{
+            console.log(response);
+
+            for(var i=0;i<response.data.length;i++){
+                showUserOnScreen(response.data[i])
+                
+            }
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    })
+
+
+        // let one =document.getElementById('1').textContent;
+        // one =+one+1;
+        // console.log(one);
+
+        // let two =document.getElementById('2').textContent;
+        // one =+two+1;
+        // console.log(two);
+
+        // let three =document.getElementById('3').textContent;
+        // one =+three+1;
+        // console.log(three);
+
+        // let four =document.getElementById('4').textContent;
+        // one =+four+1;
+        // console.log(four);
+
+        // let five =document.getElementById('5').textContent;
+        // one =+five+1;
+        // console.log(five);
+
+    function submitRating() {
+    const selectedRating = document.getElementById('rating').value;
+    if (selectedRating) {
+        const ratingValue = document.getElementById(selectedRating);
+        ratingValue.textContent = parseInt(ratingValue.textContent) + 1;
+    } else {
+        console.log('Please select a rating.');
+    }
+}
+        
+
+
+    function showUserOnScreen(obj){
+    const parentElem = document.getElementById('listOfitems')
+    const childHTML=`<li id=${obj._id}> ${obj.name} - ${obj.rating}
+      <button onclick=deleteUser('${obj._id}')>Delete User </button>
+      <button onclick=editUserDetails('${obj.name}','${obj.rating}','${obj._id}')>Edit User </button>
+      </li>`
+
+
+      parentElem.innerHTML=parentElem.innerHTML+childHTML;
+
+    }
+
+    //EDIT USER
+                        //i was not giving user_id as input so error shown but after careful observation DONe
+function editUserDetails(name,rating,userId){   
+        document.getElementById('name').value = name;
+        document.getElementById('rating').value=rating;
+        
+
+        deleteUser(userId);
+         putReq(userId,obj); //2
+      }
+
+      function putReq(userId,obj){
+        axios.put(`https://crudcrud.com/api/${api}/${userId}`,obj)
+        .then((response)=>{
+            showUserOnScreen(response.data);  //3
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+      }
+      
+    function deleteUser(userId){
+      axios.delete(`https://crudcrud.com/api/${api}/rating/${userId}`)
+      .then((response)=>{
+        removeUserFromScreen(userId)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+
+    function removeUserFromScreen(userId){
+      const parentElem = document.getElementById('listOfitems');
+      const childNodeToBeDeleted =document.getElementById(userId);
+      if(childNodeToBeDeleted){
+        parentElem.removeChild(childNodeToBeDeleted);
+      }
+    }
+
+   
+    
+    </script>
+ </body>
+</html>
